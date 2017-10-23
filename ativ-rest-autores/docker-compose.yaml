@@ -1,0 +1,21 @@
+version: "2"
+services:
+  autores-db:
+    container_name: ativ-rest-autores-db
+    build: ./database/
+    image: ativ-rest-autores-postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres-volume-db:/var/lib/postgresql/data/
+  autores-api: 
+    container_name: ativ-rest-autores-api
+    build: .
+    image: ativ-rest-autores-payara
+    ports:
+      - "8082:8080"
+    links:
+      - "autores-db:ativ-rest-autores-db"
+volumes:
+  postgres-volume-db:
+    driver: local

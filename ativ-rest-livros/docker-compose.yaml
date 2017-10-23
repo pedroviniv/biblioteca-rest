@@ -1,0 +1,21 @@
+version: "2"
+services:
+  livros-db:
+    container_name: ativ-rest-livros-db
+    build: ./database/
+    image: ativ-rest-livros-postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-volume-db:/var/lib/postgresql/data/
+  livros-api: 
+    container_name: ativ-rest-livros-api
+    build: .
+    image: ativ-rest-livros-payara
+    ports:
+      - "8081:8080"
+    links:
+      - "livros-db:ativ-rest-livros-db"
+volumes:
+  postgres-volume-db:
+    driver: local

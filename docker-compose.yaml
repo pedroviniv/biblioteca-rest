@@ -1,0 +1,41 @@
+version: "2"
+services:
+  autores-db:
+    container_name: ativ-rest-autores-db
+    build: ./ativ-rest-autores/database/
+    image: ativ-rest-autores-postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - autores-postgres-volume-db:/var/lib/postgresql/data/
+  autores-api: 
+    container_name: ativ-rest-autores-api
+    build: ./ativ-rest-autores/
+    image: ativ-rest-autores-payara
+    ports:
+      - "8082:8080"
+    links:
+      - "autores-db:autores-db"
+
+  livros-db:
+    container_name: ativ-rest-livros-db
+    build: ./ativ-rest-livros/database/
+    image: ativ-rest-livros-postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - livros-postgres-volume-db:/var/lib/postgresql/data/
+  livros-api: 
+    container_name: ativ-rest-livros-api
+    build: ./ativ-rest-livros/
+    image: ativ-rest-livros-payara
+    ports:
+      - "8081:8080"
+    links:
+      - "livros-db:livros-db"
+      - "autores-api:autores-api"
+volumes:
+  autores-postgres-volume-db:
+    driver: local
+  livros-postgres-volume-db:
+    driver: local
